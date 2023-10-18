@@ -50,8 +50,17 @@ async function run() {
       res.send(result);
       })
 
-
-
+// find multiple product
+app.get("/:brandName", async (req, res) => {
+const brand_name = req.params.brandName;
+console.log(brand_name);
+const query = {brand : brand_name}
+const cursor = productCollection.find(query);
+const result = await cursor.toArray();
+  console.log(result);
+  res.send(result);
+}
+)
 
 
     // Send a ping to confirm a successful connection
