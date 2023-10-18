@@ -30,10 +30,6 @@ async function run() {
     await client.connect();
 
 
-    // Get the database and collection on which to run the operation
-    // const database = client.db("sample_mflix");
-    // const movies = database.collection("movies");
-
     const brandCollection = client.db("brandDB").collection("brands")
     const productCollection = client.db("productDB").collection("products")
 
@@ -53,9 +49,8 @@ async function run() {
       console.log(result);
       res.send(result);
       })
-      //! insert new single products by post method
 
-//
+
 
 
 
