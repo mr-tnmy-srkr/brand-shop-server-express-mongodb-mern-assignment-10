@@ -100,6 +100,14 @@ app.put("/product/updateProduct/:brandName/:id", async (req, res) =>{
   res.send(result);
 }); 
 
+  //find all multiple products for my cart
+  app.get("/myCart", async (req, res) => {
+    const cursor = cartProductCollection.find();
+    const result = await cursor.toArray();
+    console.log(result);
+    res.send(result);
+  });
+
 
     // Send a ping to confirm a successful connection
     client.db("admin").command({ ping: 1 });
