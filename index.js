@@ -25,7 +25,7 @@ const client = new MongoClient(uri, {
 async function run() {
   try {
     // Connect the client to the server	(optional starting in v4.7)
-    client.connect();
+    // client.connect();
 
     const brandCollection = client.db("brandDB").collection("brands");
     const productCollection = client.db("productDB").collection("products");
@@ -119,6 +119,7 @@ app.put("/product/updateProduct/:brandName/:id", async (req, res) =>{
     console.log(result);
     res.send(result);
   });
+
 
     // Send a ping to confirm a successful connection
     client.db("admin").command({ ping: 1 });
