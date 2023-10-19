@@ -108,6 +108,17 @@ app.put("/product/updateProduct/:brandName/:id", async (req, res) =>{
     res.send(result);
   });
 
+  //delete single cart product
+  app.delete("/myCart/:id", async (req, res) => {
+    const id = req.params.id;
+    console.log("id", id);
+    const query = {
+      _id: id,
+    };
+    const result = await cartProductCollection.deleteOne(query);
+    console.log(result);
+    res.send(result);
+  });
 
     // Send a ping to confirm a successful connection
     client.db("admin").command({ ping: 1 });
