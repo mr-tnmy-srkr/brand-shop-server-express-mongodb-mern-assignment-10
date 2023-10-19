@@ -46,7 +46,7 @@ async function run() {
       // console.log(result);
       res.send(result);
     });
-
+    
     // find multiple product by brand name
     app.get("/product/:brandName", async (req, res) => {
       const brand_name = req.params.brandName;
@@ -67,6 +67,28 @@ async function run() {
       console.log(result);
       res.send(result);
     });
+
+//update a single product
+app.put("/product/updateProduct/:brandName/:id", async (req, res) =>{
+  const id = req.params.id;
+  const data = req.body;
+  console.log("id:", id, "Data:",data);
+  const filter = { _id: new ObjectId(id) };
+  const options = { upsert: true };
+  const updateProduct = {
+    $set: {
+     brand: data.brand,
+     image: data.image,
+     name: data.name,
+     type: data.type,
+     price: data.price,
+     rating: data.rating,
+     description: data.description,
+    },
+  };
+  const result = await productCollection.updateOne(filter, updateProduct, options);
+  res.send(result);
+})
 
     // Send a ping to confirm a successful connection
     client.db("admin").command({ ping: 1 });
