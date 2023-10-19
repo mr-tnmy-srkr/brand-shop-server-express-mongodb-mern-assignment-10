@@ -29,6 +29,7 @@ async function run() {
 
     const brandCollection = client.db("brandDB").collection("brands");
     const productCollection = client.db("productDB").collection("products");
+    const cartProductCollection = client.db("cartProductDB").collection("cartProducts");
 
     //find all multiple brands
     app.get("/brands", async (req, res) => {
@@ -89,6 +90,16 @@ app.put("/product/updateProduct/:brandName/:id", async (req, res) =>{
   const result = await productCollection.updateOne(filter, updateProduct, options);
   res.send(result);
 })
+
+// post a single product for Cart
+
+ app.post("/cartProduct", async (req, res) => {
+  const product = req.body;
+  const result = await cartProductCollection.insertOne(product);
+  console.log(result);
+  res.send(result);
+}); 
+
 
     // Send a ping to confirm a successful connection
     client.db("admin").command({ ping: 1 });
