@@ -25,7 +25,7 @@ const client = new MongoClient(uri, {
 async function run() {
   try {
     // Connect the client to the server	(optional starting in v4.7)
-    // client.connect();
+    client.connect();
 
     const brandCollection = client.db("brandDB").collection("brands");
     const productCollection = client.db("productDB").collection("products");
@@ -113,7 +113,8 @@ app.put("/product/updateProduct/:brandName/:id", async (req, res) =>{
     const id = req.params.id;
     console.log("id", id);
     const query = {
-      _id: id,
+      // _id: id,
+      "findProduct._id": id,
     };
     const result = await cartProductCollection.deleteOne(query);
     console.log(result);
