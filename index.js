@@ -112,10 +112,10 @@ app.put("/product/updateProduct/:brandName/:id", async (req, res) =>{
   app.delete("/myCart/:id", async (req, res) => {
     const id = req.params.id;
     console.log("id", id);
-    const query = {
-      // _id: id,
+   /*  const query = {
       "findProduct._id": id,
-    };
+    }; */
+    const query = { _id: new ObjectId(id) };
     const result = await cartProductCollection.deleteOne(query);
     console.log(result);
     res.send(result);
