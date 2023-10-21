@@ -29,7 +29,9 @@ async function run() {
 
     const brandCollection = client.db("brandDB").collection("brands");
     const productCollection = client.db("productDB").collection("products");
-    const cartProductCollection = client.db("cartProductDB").collection("cartProducts");
+    const cartProductCollection = client
+      .db("cartProductDB")
+      .collection("cartProducts");
 
     //find all multiple brands
     app.get("/brands", async (req, res) => {
@@ -47,7 +49,7 @@ async function run() {
       // console.log(result);
       res.send(result);
     });
-    
+
     // find multiple product by brand name
     app.get("/product/:brandName", async (req, res) => {
       const brand_name = req.params.brandName;
@@ -69,58 +71,57 @@ async function run() {
       res.send(result);
     });
 
-//update a single product
-app.put("/product/updateProduct/:brandName/:id", async (req, res) =>{
-  const id = req.params.id;
-  const data = req.body;
-  console.log("id:", id, "Data:",data);
-  const filter = { _id: new ObjectId(id) };
-  const options = { upsert: true };
-  const updateProduct = {
-    $set: {
-     brand: data.brand,
-     image: data.image,
-     name: data.name,
-     type: data.type,
-     price: data.price,
-     rating: data.rating,
-     description: data.description,
-    },
-  };
-  const result = await productCollection.updateOne(filter, updateProduct, options);
-  res.send(result);
-})
+    //update a single product
+    app.put("/product/updateProduct/:brandName/:id", async (req, res) => {
+      const id = req.params.id;
+      const data = req.body;
+      console.log("id:", id, "Data:", data);
+      const filter = { _id: new ObjectId(id) };
+      const options = { upsert: true };
+      const updateProduct = {
+        $set: {
+          brand: data.brand,
+          image: data.image,
+          name: data.name,
+          type: data.type,
+          price: data.price,
+          rating: data.rating,
+          description: data.description,
+        },
+      };
+      const result = await productCollection.updateOne(
+        filter,
+        updateProduct,
+        options
+      );
+      res.send(result);
+    });
 
-// post a single product for Cart
+    // post a single product for Cart
+    app.post("/cartProduct", async (req, res) => {
+      const product = req.body;
+      const result = await cartProductCollection.insertOne(product);
+      console.log(result);
+      res.send(result);
+    });
 
- app.post("/cartProduct", async (req, res) => {
-  const product = req.body;
-  const result = await cartProductCollection.insertOne(product);
-  console.log(result);
-  res.send(result);
-}); 
+    //find all multiple products for my cart
+    app.get("/myCart", async (req, res) => {
+      const cursor = cartProductCollection.find();
+      const result = await cursor.toArray();
+      console.log(result);
+      res.send(result);
+    });
 
-  //find all multiple products for my cart
-  app.get("/myCart", async (req, res) => {
-    const cursor = cartProductCollection.find();
-    const result = await cursor.toArray();
-    console.log(result);
-    res.send(result);
-  });
-
-  //delete single cart product
-  app.delete("/myCart/:id", async (req, res) => {
-    const id = req.params.id;
-    console.log("id", id);
-   /*  const query = {
-      "findProduct._id": id,
-    }; */
-    const query = { _id: new ObjectId(id) };
-    const result = await cartProductCollection.deleteOne(query);
-    console.log(result);
-    res.send(result);
-  });
-
+    //delete single cart product
+    app.delete("/myCart/:id", async (req, res) => {
+      const id = req.params.id;
+      console.log("id", id);
+      const query = { _id: new ObjectId(id) };
+      const result = await cartProductCollection.deleteOne(query);
+      console.log(result);
+      res.send(result);
+    });
 
     // Send a ping to confirm a successful connection
     client.db("admin").command({ ping: 1 });
